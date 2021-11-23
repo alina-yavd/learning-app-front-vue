@@ -1,0 +1,90 @@
+section:not(.tests) {
+  padding: 40px 0;
+
+  &.language,
+  &.auth + .auth,
+  &.profile + .learning {
+    padding-top: 0;
+  }
+}
+
+.flag {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 10px;
+  border-radius: 100px;
+  overflow: hidden;
+
+  img {
+    width: 40px;
+  }
+}
+
+.lang-flags-wrap {
+  display: flex;
+  align-items: center;
+
+  .flag + .flag {
+    position: relative;
+    padding-left: 15px;
+
+    &:before {
+      content: '\f054';
+      position: absolute;
+      top: calc(50% - 7px);
+      left: 0;
+      display: inline-block;
+      font-style: normal;
+      font-variant: normal;
+      text-rendering: auto;
+      line-height: 1;
+      font-family: "Font Awesome 5 Pro";
+      font-weight: 900;
+    }
+  }
+}
+
+.tests-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  overflow: hidden;
+
+  .nav-block {
+    display: flex;
+    align-items: center;
+
+    > * {
+      padding: 0 10px;
+    }
+
+    &.nav-right {
+      justify-content: flex-end;
+    }
+  }
+
+  .current-language {
+    margin: 7px 0;
+    color: #6f849c;
+    border-right: 1px solid #6f849c;
+
+    .flag img {
+      width: 25px;
+    }
+  }
+
+  .current-source {
+    margin: 7px 0;
+    color: #6f849c;
+  }
+}
+
+.user-groups-title {
+  padding: 0 15px;
+}
+
+.upload-forms > div:not(:last-child) {
+  margin-bottom: 40px;
+}

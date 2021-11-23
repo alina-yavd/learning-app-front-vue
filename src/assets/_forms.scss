@@ -1,0 +1,85 @@
+select,
+input:not([type="file"]) {
+  width: 200px;
+  padding: 5px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  background: transparent;
+}
+
+form {
+  margin: 0 auto;
+  padding: 20px 40px;
+  background-color: #fff;
+  @include shadow;
+  @include radius;
+
+  .fields {
+    display: flex;
+    flex-wrap: wrap;
+
+    .field {
+      width: 100%;
+      padding: 10px 0;
+
+      &.field-s {
+        @media (min-width: 768px) {
+          width: 50%;
+          padding-left: 5px;
+          padding-right: 5px;
+        }
+      }
+    }
+
+    label {
+      display: block;
+
+      @media (min-width: 576px) {
+        display: flex;
+        align-items: center;
+
+      }
+
+      span {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 5px;
+
+        @media (min-width: 576px) {
+          width: 200px;
+          max-width: 40%;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .submit-btn {
+    padding-top: 20px;
+
+    .btn {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .description {
+    margin-top: 5px;
+    font-size: 0.9em;
+  }
+
+  .message-success {
+    color: #0b8a3b;
+  }
+
+  .message-error {
+    color: #bd0d22;
+  }
+
+  .title-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

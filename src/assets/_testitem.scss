@@ -1,0 +1,53 @@
+.test-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+
+  .question {
+    min-height: 38px;
+    font-size: 1.8em;
+  }
+
+  .answers {
+    margin: 15px 0 30px;
+    font-size: 1.4em;
+
+    .answer {
+      max-width: 400px;
+      min-height: 68px;
+      margin: 15px auto;
+      padding: 20px 40px;
+      background-color: #fff;
+      cursor: pointer;
+      transition: all 0.3s;
+      @include shadow;
+      @include radius;
+
+      &:hover {
+        background-color: var(--color-beige);
+      }
+    }
+
+    .correct-answer {
+      &.success {
+        color: #0b8a3b;
+      }
+
+      &.error {
+        color: #bd0d22;
+      }
+    }
+  }
+
+  .question-buttons {
+    display: flex;
+    justify-content: center;
+
+    & > div {
+      display: inline-block;
+    }
+  }
+}
