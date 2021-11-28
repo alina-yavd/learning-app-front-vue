@@ -35,6 +35,12 @@ const routes = [
         },
         header: true,
     },
+    {
+        path: '/profile',
+        name: 'Личный кабинет',
+        component: Test,
+        header: true,
+    },
 ]
 
 const router = new VueRouter({

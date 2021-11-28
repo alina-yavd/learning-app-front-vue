@@ -12,6 +12,13 @@ export default {
   inject: ['api'],
   components: {ListItem},
 
+  props: {
+    filters: {
+      type: Object,
+      required: false
+    },
+  },
+
   data() {
     return {
       lists: null,
@@ -28,6 +35,10 @@ export default {
       }
     },
 
+    filterData() {
+      this.getLists(this.filters.originalCode, this.filters.translationCode);
+    },
+
     getList(id) {
       console.log('getList id ' + id);
       let vm = this;
@@ -38,14 +49,14 @@ export default {
           });
     },
 
-    getLists() {
+    getLists(original, translation) {
       console.log('getLists');
       let vm = this;
-      this.api.getLists()
+      this.api.getLists(original, translation)
           .then(function (response) {
             vm.lists = response.data;
           });
-    }
+    },
   },
 
   mounted() {
@@ -60,6 +71,11 @@ export default {
         this.fetchData(id)
       },
       immediate: true,
+    },
+
+    filters(newValue) {
+      this.filters = newValue;
+      this.filterData();
     }
   }
 }

@@ -2,8 +2,19 @@
   <section class="tests">
     <div class="tests-nav">
       <div class="nav-block nav-left">
-        <div class="current-language"><span>Язык:&nbsp;</span><span>{{ language ? language : 'Все' }}</span></div>
-        <div class="current-source">Группа слов: <span>{{ list ? list : 'Все слова' }}</span>&nbsp;
+        <div class="current-language"><span>Язык:&nbsp;</span>
+          <span v-if="language">
+            <span class="language">{{ language.name }}</span>
+            <span v-if="flagLanguage" class="flag"><img :src="flagLanguage"></span>
+          </span>
+          <span v-else>Все</span>
+        </div>
+        <div class="current-source"><span>Группа слов:&nbsp;</span>
+          <span v-if="list">
+            <router-link :to="'/lists/'+list.id" class="list-name">{{ list.name }}</router-link>&nbsp;
+            <span class="btn-inline group-clear"><i class="far fa-times-circle"></i></span>
+          </span>
+          <span v-else>Все слова</span>
         </div>
       </div>
       <div class="nav-block nav-right">
@@ -30,6 +41,7 @@ export default {
       resultsCountCorrect: 0,
       language: null,
       list: null,
+      flagLanguage: this.language ? require('@/assets/images/flags/' + this.language.code + '.svg') : null,
     }
   },
 

@@ -19,7 +19,7 @@
       </div>
 
       <div class="btns-wrap">
-          <span class="list-progress">
+          <span v-if="user" class="list-progress">
               <span class="progress-inner">
                   <span class="number">{{ list.progress }}%</span>
                   <span class="line" :style="{width: list.progress}"></span>
@@ -29,7 +29,7 @@
           <span class="flag"><img :src="flagLanguage"></span>
           <span class="flag"><img :src="flagTranslation"></span>
         </div>
-        <div class="btn-test" v-on:click="startTest(list.id)">
+        <div class="btn-test" v-on:click="startTest">
           <span class="btn btn-outline">Начать тест</span>
         </div>
         <div v-if="user" class="btn-delete-list">
@@ -66,8 +66,9 @@ export default {
   },
 
   methods: {
-    startTest(id) {
-      console.log('startTest id ' + id);
+    startTest() {
+      console.log('startTest id ' + this.list.id);
+      this.$store.commit('setList', this.list);
     }
   },
 }

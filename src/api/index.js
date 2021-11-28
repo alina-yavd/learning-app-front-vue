@@ -3,8 +3,14 @@ import axios from 'axios';
 const apiUrl = 'https://127.0.0.1:8000/api/';
 
 class Api {
-    getTest() {
-        return axios.get(apiUrl + 'test')
+    getTest(listId) {
+        let url = new URL(apiUrl + 'test');
+
+        if (listId) {
+            url.searchParams.append('groupId', listId);
+        }
+
+        return axios.get(url.toString())
             .then(response => response.data);
     }
 
@@ -15,12 +21,16 @@ class Api {
     }
 
     getLists(language, translation) {
-        let url = apiUrl + 'group';
-        if (!!language || !!translation) {
-            url += '?language=' + language + '&translation=' + translation;
+        let url = new URL(apiUrl + 'group');
+
+        if (language) {
+            url.searchParams.append('language', language);
+        }
+        if (translation) {
+            url.searchParams.append('translation', translation);
         }
 
-        return axios.get(url)
+        return axios.get(url.toString())
             .then(response => response.data);
     }
 
