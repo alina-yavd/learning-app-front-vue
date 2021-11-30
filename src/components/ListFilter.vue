@@ -1,14 +1,15 @@
 <template>
-  <form v-on:submit.prevent="onSubmit" class="list-filter-form" method="post">
+  <form v-on:submit.prevent="filterLists({language: languageCode, translation: translationCode})" class="list-filter-form" method="post">
     <h4>Фильтр:</h4>
     <div class="fields">
       <div class="field field-s">
         <label>
           <span>Язык оригинала</span>
-          <select v-model="originalCode" class="language-select">
+          <select v-model="languageCode" class="language-select">
             <option></option>
             <option v-for="language in languages" :key="language.code"
-                    :value="language.code">{{ language.name }}</option>
+                    :value="language.code">{{ language.name }}
+            </option>
           </select>
         </label>
       </div>
@@ -18,7 +19,8 @@
           <select v-model="translationCode" class="language-select">
             <option></option>
             <option v-for="language in languages" :key="language.code"
-                    :value="language.code">{{ language.name }}</option>
+                    :value="language.code">{{ language.name }}
+            </option>
           </select>
         </label>
       </div>
@@ -30,41 +32,37 @@
 </template>
 
 <script>
+import {mapActions, mapState} from 'vuex';
+import {A_GET_LANGUAGES, A_GET_LISTS} from '../types/actions';
 
 export default {
   name: 'ListFilter',
-  inject: ['api'],
 
   data() {
     return {
-      originalCode: null,
+      languageCode: null,
       translationCode: null,
-      languages: null,
     }
   },
 
+  async beforeCreate() {
+    await this.$store.dispatch('languages/' + A_GET_LANGUAGES);
+  },
+
+  computed: {
+    ...mapState('languages', {
+      languages: state => state.languages,
+    }),
+  },
+
   methods: {
-    getLanguages() { // TODO: make one with UploadList component
-      console.log('getLanguages');
-      let vm = this;
-      this.api.getLanguages()
-          .then(function (response) {
-            vm.languages = response.data;
-          });
-    },
-
-    onSubmit() {
-      this.$emit('filterLists',
-          {originalCode: this.originalCode, translationCode: this.translationCode}
-      );
-    },
+    ...mapActions('languages', {
+      getLanguages: A_GET_LANGUAGES,
+    }),
+    ...mapActions('lists', {
+      filterLists: A_GET_LISTS,
+    }),
   },
-
-  mounted() {
-    console.log('mounted');
-    this.getLanguages();
-  },
-
 }
 </script>
 

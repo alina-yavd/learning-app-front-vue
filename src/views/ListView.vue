@@ -1,7 +1,7 @@
 <template>
   <section class="words">
-    <list-filter v-if="!$route.params.id" @filterLists="filter($event)"/>
-    <list :filters="filters"/>
+    <list-filter v-if="!$route.params.id"/>
+    <list/>
   </section>
 </template>
 
@@ -12,17 +12,5 @@ import ListFilter from '../components/ListFilter';
 export default {
   name: 'ListView',
   components: {ListFilter, List},
-
-  data() {
-    return {
-      filters: null,
-    }
-  },
-
-  methods: {
-    filter(filters) {
-      this.filters = filters;
-    }
-  }
 }
 </script>

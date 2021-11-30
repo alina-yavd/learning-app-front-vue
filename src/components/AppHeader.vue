@@ -20,6 +20,7 @@
 <script>
 export default {
   name: 'AppHeader',
+
   data() {
     return {
       routes: this.$router.options.routes.filter(item => item.header)

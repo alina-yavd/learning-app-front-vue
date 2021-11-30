@@ -1,82 +1,43 @@
 <template>
   <div class="word-list">
-    <list-item v-for="list in lists" :key="list.id" :list="list" :user="user"/>
+    <list-item v-for="list in lists" :key="list.id" :list="list"/>
   </div>
 </template>
 
 <script>
-import ListItem from "./ListItem";
+import ListItem from './ListItem';
+import {mapActions, mapState} from 'vuex';
+import {A_GET_LISTS} from '../types/actions';
 
 export default {
   name: 'List',
-  inject: ['api'],
   components: {ListItem},
 
-  props: {
-    filters: {
-      type: Object,
-      required: false
-    },
-  },
-
-  data() {
-    return {
-      lists: null,
-      user: null,
-    }
+  computed: {
+    ...mapState('lists', {
+      lists: state => state.lists,
+    }),
+    ...mapState('user', {
+      user: state => state.user,
+      list: state => state.list,
+      language:  state => state.language,
+    }),
   },
 
   methods: {
-    fetchData(id) {
-      if (id) {
-        this.getList(id);
-      } else {
-        this.getLists();
-      }
-    },
-
-    filterData() {
-      this.getLists(this.filters.originalCode, this.filters.translationCode);
-    },
-
-    getList(id) {
-      console.log('getList id ' + id);
-      let vm = this;
-      this.api.getList(id)
-          .then(function (response) {
-            vm.lists = [];
-            vm.lists[0] = response;
-          });
-    },
-
-    getLists(original, translation) {
-      console.log('getLists');
-      let vm = this;
-      this.api.getLists(original, translation)
-          .then(function (response) {
-            vm.lists = response.data;
-          });
-    },
-  },
-
-  mounted() {
-    console.log('mounted');
-    this.fetchData(this.$route.params.id);
+    ...mapActions('lists', {
+      getLists: A_GET_LISTS,
+    }),
   },
 
   watch: {
     '$route.params': {
       handler(newValue) {
         const {id} = newValue
-        this.fetchData(id)
+        this.getLists({id: id})
       },
       immediate: true,
     },
-
-    filters(newValue) {
-      this.filters = newValue;
-      this.filterData();
-    }
   }
 }
 </script>

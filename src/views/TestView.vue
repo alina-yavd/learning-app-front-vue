@@ -12,7 +12,7 @@
         <div class="current-source"><span>Группа слов:&nbsp;</span>
           <span v-if="list">
             <router-link :to="{name: 'List', params: {id: list.id}}" class="list-name">{{ list.name }}</router-link>&nbsp;
-            <span class="btn-inline group-clear"><i class="far fa-times-circle"></i></span>
+            <span v-on:click="resetList" class="btn-inline group-clear"><i class="far fa-times-circle"></i></span>
           </span>
           <span v-else>Все слова</span>
         </div>
@@ -29,14 +29,14 @@
 </template>
 
 <script>
-
 import TestItem from '../components/TestItem';
-import {mapActions, mapState} from "vuex";
-import {A_RESET_COUNT} from "../types/actions";
+import {mapActions, mapState} from 'vuex';
+import {A_RESET_COUNT, A_RESET_LIST} from '../types/actions';
 
 export default {
   name: 'TestView',
   components: {TestItem},
+
   data() {
     return {
       flagLanguage: this.language ? require('@/assets/images/flags/' + this.language.code + '.svg') : null,
@@ -52,16 +52,20 @@ export default {
       resultsCountAll: state => state.resultsCountAll,
       resultsCountCorrect: state => state.resultsCountCorrect,
     }),
+    ...mapState('user', {
+      user: state => state.user,
+      list: state => state.list,
+      language: state => state.language,
+    }),
   },
 
   methods: {
     ...mapActions('tests', {
       resetCount: A_RESET_COUNT,
     }),
-  },
-
-  mounted() {
-    console.log('mounted page');
+    ...mapActions('user', {
+      resetList: A_RESET_LIST,
+    }),
   },
 }
 </script>

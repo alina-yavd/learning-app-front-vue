@@ -1,8 +1,11 @@
 import api from '@/api';
+import router from '../router'
+
 import {
     A_GET_TEST,
     A_CHECK_ANSWER,
     A_INIT_TEST_STORE,
+    A_START_TEST,
     A_UPDATE_COUNT,
     A_RESET_COUNT
 } from '../types/actions';
@@ -12,7 +15,8 @@ import {
     SET_TEST_RESULT_TEXT,
     SET_RESULTS_COUNT,
     UPDATE_RESULTS_COUNT,
-    SAVE_RESULTS_COUNT
+    SAVE_RESULTS_COUNT,
+    SET_USER_LIST
 } from '../types/mutations';
 
 export default {
@@ -73,18 +77,19 @@ export default {
     },
 
     actions: {
-        [A_INIT_TEST_STORE](store) {
-            store.commit('SET_RESULTS_COUNT', {
+        [A_INIT_TEST_STORE]({commit}) {
+            commit('SET_RESULTS_COUNT', {
                 all: localStorage.getItem('resultsCountAll'),
                 correct: localStorage.getItem('resultsCountCorrect'),
             });
-            store.commit('SAVE_RESULTS_COUNT');
+            commit('SAVE_RESULTS_COUNT');
         },
 
-        async [A_GET_TEST]({commit}) {
-            console.log('getting test');
+        async [A_GET_TEST]({commit, rootState}) {
+            const listId = rootState.user.list ? rootState.user.list.id : null;
+            console.log('getting test ' + listId);
             try {
-                const data = await api.getTest();
+                const data = await api.getTest(listId);
                 commit(SET_TEST, await data.data);
             } catch (error) {
                 console.log(error);
@@ -98,10 +103,16 @@ export default {
                 commit(SET_TEST_RESULT, await data.data);
                 commit(SET_TEST_RESULT_TEXT, await data.data);
                 commit(UPDATE_RESULTS_COUNT, await data.data)
-                await this.dispatch('tests/' + A_GET_TEST); // TODO: check if ok
+                await this.dispatch('tests/' + A_GET_TEST); // TODO: ok to use like this?
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        async [A_START_TEST]({commit}, list) {
+            commit('user/' + SET_USER_LIST, list, {root: true});
+            await this.dispatch('tests/' + A_GET_TEST); // TODO: ok to use like this?
+            await router.push({name: 'Test'});
         },
 
         [A_UPDATE_COUNT]({commit}) { // TODO: изменить способ сохранения чтобы убрать watcher с компонента

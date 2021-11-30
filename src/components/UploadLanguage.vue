@@ -27,7 +27,6 @@
 <script>
 export default {
   name: 'UploadLanguage',
-  inject: ['api'],
 
   data() {
     return {

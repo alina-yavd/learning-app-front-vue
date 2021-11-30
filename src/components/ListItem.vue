@@ -29,7 +29,7 @@
           <span class="flag"><img :src="flagLanguage"></span>
           <span class="flag"><img :src="flagTranslation"></span>
         </div>
-        <div class="btn-test" v-on:click="startTest">
+        <div class="btn-test" v-on:click="startTest(list)">
           <span class="btn btn-outline">Начать тест</span>
         </div>
         <div v-if="user" class="btn-delete-list">
@@ -39,24 +39,17 @@
     </div>
 
     <div v-if="list.words" class="list-words">
-      <div v-for="word in list.words" :key="word.id" class="word">{{ word.text }}</div>
+      <div v-for="word in list.words" :key="word.id" class="word">{{ word.text }} - {{word.translations.map(item => item.text).toString()}}</div>
     </div>
   </div>
 </template>
 
 <script>
+import {mapActions, mapState} from 'vuex';
+import {A_START_TEST} from '../types/actions';
+
 export default {
   name: 'ListItem',
-  props: {
-    list: {
-      type: Object,
-      required: true
-    },
-    user: {
-      type: Object,
-      required: false
-    },
-  },
 
   data() {
     return {
@@ -65,12 +58,24 @@ export default {
     }
   },
 
+  props: {
+    list: {
+      type: Object,
+      required: true
+    },
+  },
+
+  computed: {
+    ...mapState('user', {
+      user: state => state.user,
+    }),
+  },
+
+
   methods: {
-    startTest() {
-      console.log('startTest id ' + this.list.id);
-      // this.$store.state.local.list = this.list; // TODO: also save to localStorage and add store watchers
-      // this.$store.commit('setList', this.list);
-    }
+    ...mapActions('tests', {
+      startTest: A_START_TEST,
+    }),
   },
 }
 </script>

@@ -62,6 +62,10 @@ const api = {
             {code: code, name: name}
         );
     },
+
+    getUser() {
+        return null; // TODO
+    }
 }
 
 export default api

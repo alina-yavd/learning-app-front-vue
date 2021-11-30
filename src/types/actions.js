@@ -1,5 +1,10 @@
 export const A_INIT_TEST_STORE = 'A_INIT_TEST_STORE';
 export const A_GET_TEST = 'A_GET_TEST';
 export const A_CHECK_ANSWER = 'A_CHECK_ANSWER';
+export const A_START_TEST = 'A_START_TEST';
 export const A_UPDATE_COUNT = 'A_UPDATE_COUNT';
 export const A_RESET_COUNT = 'A_RESET_COUNT';
+export const A_GET_LISTS = 'A_GET_LISTS';
+export const A_RESET_LIST = 'A_RESET_LIST';
+export const A_GET_USER = 'A_GET_USER';
+export const A_GET_LANGUAGES = 'A_GET_LANGUAGES';

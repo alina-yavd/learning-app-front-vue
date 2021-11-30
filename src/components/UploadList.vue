@@ -53,7 +53,6 @@
 <script>
 export default {
   name: 'UploadList',
-  inject: ['api'],
 
   data() {
     return {
