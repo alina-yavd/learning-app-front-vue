@@ -7,13 +7,15 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        name: 'Тесты',
+        name: 'Test',
+        title: 'Тесты',
         component: Test,
         header: true,
     },
     {
         path: '/lists/:id',
-        name: 'Группа слов',
+        name: 'List',
+        title: 'Группа слов',
         component: function () {
             return import('../views/ListView.vue')
         },
@@ -21,7 +23,8 @@ const routes = [
     },
     {
         path: '/lists/',
-        name: 'Списки слов',
+        name: 'Lists',
+        title: 'Списки слов',
         component: function () {
             return import('../views/ListView.vue')
         },
@@ -29,7 +32,8 @@ const routes = [
     },
     {
         path: '/upload',
-        name: 'Загрузить список',
+        name: 'Upload',
+        title: 'Загрузить список',
         component: function () {
             return import('../views/UploadView.vue')
         },
@@ -37,7 +41,8 @@ const routes = [
     },
     {
         path: '/profile',
-        name: 'Личный кабинет',
+        name: 'Profile',
+        title: 'Личный кабинет',
         component: Test,
         header: true,
     },

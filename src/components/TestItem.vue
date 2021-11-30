@@ -2,14 +2,14 @@
   <div v-if="currentWord" class="test-inner">
     <div class="question">{{ currentWord.text }}</div>
     <div v-if="currentAnswers" class="answers">
-      <div v-for="answer in currentAnswers" v-on:click="checkAnswer(answer.id)" :key="answer.id" class="answer">
+      <div v-for="answer in currentAnswers" v-on:click="checkAnswerTemp({wordId: currentWord.id, answerId: answer.id})" :key="answer.id" class="answer">
         {{ answer.text }}
       </div>
       <div v-if="hasResult" :class="`${'correct-answer ' + (resultStatus ? 'success' : 'error')}`"
            v-html="resultText"></div>
     </div>
     <div class="question-buttons">
-      <div v-on:click="getTest" class="btn-next"><span
+      <div v-on:click="getTestTemp" class="btn-next"><span
           class="btn btn-bg btn-icon btn-icon-right">Следующий вопрос</span>
       </div>
     </div>
@@ -17,98 +17,44 @@
 </template>
 
 <script>
+import {mapState, mapActions} from 'vuex';
+import {A_CHECK_ANSWER, A_GET_TEST, A_UPDATE_COUNT} from '../types/actions';
+
 export default {
   name: 'TestItem',
-  inject: ['api'],
 
-  data() {
-    return {
-      hasResult: null,
-      currentWord: null,
-      currentAnswers: null,
-      resultText: null,
-      resultStatus: false,
-      resultsCountAll: 0,
-      resultsCountCorrect: 0,
-    }
+  async beforeCreate() {
+    await this.$store.dispatch('tests/' + A_GET_TEST);
+  },
+
+  computed: {
+    ...mapState('tests', {
+      currentWord: state => state.word,
+      currentAnswers: state => state.answers,
+      hasResult: state => state.hasResult,
+      resultStatus: state => state.resultStatus,
+      resultText: state => state.resultText,
+      resultsCountAll: state => state.resultsCountAll,
+      resultsCountCorrect: state => state.resultsCountCorrect,
+    })
   },
 
   methods: {
-    getTest(i = 0) {
-      console.log('getTest');
-      let vm = this;
-      this.api.getTest()
-          .then(function (response) {
-            vm.currentWord = response.word;
-            vm.currentAnswers = response.answers.data;
-          })
-          .catch(() => {
-            i++;
-            if (i < 5) {
-              vm.getTest(i);
-            }
-          });
-    },
-
-    checkAnswer(id) {
-      console.log('checkAnswer');
-      let vm = this;
-      this.api.checkAnswer(vm.currentWord.id, id)
-          .then(function (response) {
-            console.log(response);
-            vm.hasResult = true;
-            vm.resultStatus = response.result;
-            vm.setResultText(response);
-          })
-          .then(() => {
-            this.getTest()
-          });
-    },
-
-
-    setResultText(data) {
-      let answers = [];
-      let answersText = [];
-      if (data.group) {
-        answers = data.word.translations.filter(x => x.language === data.group.translation.code);
-      } else {
-        answers = data.word.translations;
-      }
-      answers.map(function (answer) {
-        answersText.push(answer.text);
-      });
-      this.resultText = data.word.text + " &mdash; " + answersText.join(' | ');
-      this.updateResultsCount();
-    },
-
-    updateResultsCount() {
-      this.resultsCountAll++;
-      if (this.resultStatus) {
-        this.resultsCountCorrect++;
-      }
-    }
-  },
-
-  mounted() {
-    console.log('mounted');
-    this.getTest();
-
-    if (localStorage.resultsCountAll) {
-      this.resultsCountAll = parseInt(localStorage.resultsCountAll);
-    }
-    if (localStorage.resultsCountCorrect) {
-      this.resultsCountCorrect = parseInt(localStorage.resultsCountCorrect);
-    }
+    ...mapActions('tests', {
+      getTestTemp: A_GET_TEST,
+      checkAnswerTemp: A_CHECK_ANSWER,
+      updateCount: A_UPDATE_COUNT,
+    }),
   },
 
   watch: {
-    resultsCountAll(newCount) {
-      localStorage.resultsCountAll = newCount;
+    resultsCountAll() {
+      this.updateCount();
     },
-    resultsCountCorrect(newCount) {
-      localStorage.resultsCountCorrect = newCount;
+    resultsCountCorrect() {
+      this.updateCount();
     }
-  }
+  },
 }
 </script>
 

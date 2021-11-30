@@ -11,14 +11,14 @@
         </div>
         <div class="current-source"><span>Группа слов:&nbsp;</span>
           <span v-if="list">
-            <router-link :to="'/lists/'+list.id" class="list-name">{{ list.name }}</router-link>&nbsp;
+            <router-link :to="{name: 'List', params: {id: list.id}}" class="list-name">{{ list.name }}</router-link>&nbsp;
             <span class="btn-inline group-clear"><i class="far fa-times-circle"></i></span>
           </span>
           <span v-else>Все слова</span>
         </div>
       </div>
       <div class="nav-block nav-right">
-        <div class="results-clear" v-on:click="clearResultsCount"><span class="btn btn-inline">Очистить прогресс</span></div>
+        <div class="results-clear" v-on:click="resetCount"><span class="btn btn-inline">Очистить прогресс</span></div>
         <div class="results-count">Ответов:
           <span>{{ resultsCountAll ? resultsCountCorrect + ' / ' + resultsCountAll : 0 }}</span>
         </div>
@@ -31,45 +31,37 @@
 <script>
 
 import TestItem from '../components/TestItem';
+import {mapActions, mapState} from "vuex";
+import {A_RESET_COUNT} from "../types/actions";
 
 export default {
   name: 'TestView',
   components: {TestItem},
   data() {
     return {
-      resultsCountAll: 0,
-      resultsCountCorrect: 0,
-      language: null,
-      list: null,
       flagLanguage: this.language ? require('@/assets/images/flags/' + this.language.code + '.svg') : null,
     }
   },
 
+  computed: {
+    ...mapState({
+      language: state => state.local.language,
+      list: state => state.local.list,
+    }),
+    ...mapState('tests', {
+      resultsCountAll: state => state.resultsCountAll,
+      resultsCountCorrect: state => state.resultsCountCorrect,
+    }),
+  },
+
   methods: {
-    clearResultsCount() {
-      this.resultsCountAll = 0;
-      this.resultsCountCorrect = 0;
-    }
+    ...mapActions('tests', {
+      resetCount: A_RESET_COUNT,
+    }),
   },
 
-  mounted() { // TODO: make one with TestItem component
+  mounted() {
     console.log('mounted page');
-
-    if (localStorage.resultsCountAll) {
-      this.resultsCountAll = parseInt(localStorage.resultsCountAll);
-    }
-    if (localStorage.resultsCountCorrect) {
-      this.resultsCountCorrect = parseInt(localStorage.resultsCountCorrect);
-    }
   },
-
-  watch: { // TODO: make one with TestItem component
-    resultsCountAll(newCount) {
-      localStorage.resultsCountAll = newCount;
-    },
-    resultsCountCorrect(newCount) {
-      localStorage.resultsCountCorrect = newCount;
-    }
-  }
 }
 </script>

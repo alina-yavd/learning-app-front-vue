@@ -3,12 +3,12 @@
     <div class="container">
       <div class="head-wrap">
         <div class="head-title">
-          <router-link to="/"><span class="head-title-desc">Learning App</span></router-link>
+          <router-link :to="{name: 'Test'}"><span class="head-title-desc">Learning App</span></router-link>
         </div>
         <div class="head-menu">
           <ul id="nav">
             <li v-for="route in routes" :key="route.path">
-              <router-link :to="route.path" router-link-exact-active>{{ route.name }}</router-link>
+              <router-link :to="route.path" router-link-exact-active>{{ route.title }}</router-link>
             </li>
           </ul>
         </div>

@@ -12,7 +12,7 @@
                 class="far fa-plus"></i></span>
           </div>
         </template>
-        <router-link :to="'/lists/'+list.id" class="list-name-wrap">
+        <router-link :to="{name: 'List', params: {id: list.id}}" class="list-name-wrap">
           <span class="list-name">{{ list.name }}</span>
         </router-link>
 
@@ -68,7 +68,8 @@ export default {
   methods: {
     startTest() {
       console.log('startTest id ' + this.list.id);
-      this.$store.commit('setList', this.list);
+      // this.$store.state.local.list = this.list; // TODO: also save to localStorage and add store watchers
+      // this.$store.commit('setList', this.list);
     }
   },
 }

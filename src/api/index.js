@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const apiUrl = 'https://127.0.0.1:8000/api/';
 
-class Api {
+const api = {
     getTest(listId) {
         let url = new URL(apiUrl + 'test');
 
@@ -10,15 +10,13 @@ class Api {
             url.searchParams.append('groupId', listId);
         }
 
-        return axios.get(url.toString())
-            .then(response => response.data);
-    }
+        return axios.get(url.toString());
+    },
 
     checkAnswer(wordId, answerId) {
         return axios.post(apiUrl + 'test',
-            {wordId: wordId, answerId: answerId}
-        ).then(response => response.data);
-    }
+            {wordId: wordId, answerId: answerId});
+    },
 
     getLists(language, translation) {
         let url = new URL(apiUrl + 'group');
@@ -30,23 +28,20 @@ class Api {
             url.searchParams.append('translation', translation);
         }
 
-        return axios.get(url.toString())
-            .then(response => response.data);
-    }
+        return axios.get(url.toString());
+    },
 
     getList(id) {
         if (!id || id < 1) {
             return null;
         }
 
-        return axios.get(apiUrl + 'group/' + id)
-            .then(response => response.data);
-    }
+        return axios.get(apiUrl + 'group/' + id);
+    },
 
     getLanguages() {
-        return axios.get(apiUrl + 'language')
-            .then(response => response.data);
-    }
+        return axios.get(apiUrl + 'language');
+    },
 
     uploadList(file, title, language, translation) {
         let formData = new FormData();
@@ -59,16 +54,14 @@ class Api {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        }).then(response => response.data);
-    }
+        });
+    },
 
     uploadLanguage(code, name) {
         return axios.post(apiUrl + 'language/create',
             {code: code, name: name}
-        ).then(response => response.data);
-    }
+        );
+    },
 }
-
-const api = new Api()
 
 export default api
